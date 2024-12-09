@@ -1,20 +1,7 @@
 {% macro render_service(name, status) %}
     {% match status %}
         {% when Status::Online %}<span class="online">{{ name }}</span>
-        {% when Status::Outage with { message } %}
-            {% if let Some(message) = message.is_some() %}
-                <details>
-                    <summary class="outage">{{ name }}</summary>
-                    <table>
-                        <tr>
-                            <th>Message</th>
-                            <td>{{ message }}</td>
-                        </tr>
-                    </table>
-                </details>
-            {% else %}
-                <span class="outage">{{ name }}</span>
-            {% endif %}
+        {% when Status::Outage %}<span class="outage">{{ name }}</span>
     {% endmatch %}
 {% endmacro %}
 

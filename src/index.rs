@@ -1,5 +1,5 @@
 use rinja::Template;
-use crate::Items;
+use crate::{Status, Items, Item};
 
 #[derive(Template)]
 #[template(path = "index.html")]

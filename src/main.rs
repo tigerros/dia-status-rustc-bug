@@ -7,12 +7,7 @@ use crate::index::IndexTemplate;
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Status {
     Online,
-    Outage {
-        causes: Vec<String>,
-        message: Option<String>,
-        start: Option<String>,
-        estimated_end: Option<String>,
-    }
+    Outage
 }
 
 impl Status {
@@ -72,5 +67,5 @@ fn main() {
 
     let template = IndexTemplate { items };
 
-    println!("{}", template.render());
+    println!("{:?}", template.render());
 }
