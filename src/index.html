@@ -1,10 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% macro render_service(name, status) %}
+    {% match status %}
+        {% when Status::Online %}<span class="online">{{ name }}</span>
+        {% when Status::Outage with { message } %}
+            {% if let Some(message) = message.is_some() %}
+                <details>
+                    <summary class="outage">{{ name }}</summary>
+                    <table>
+                        <tr>
+                            <th>Message</th>
+                            <td>{{ message }}</td>
+                        </tr>
+                    </table>
+                </details>
+            {% else %}
+                <span class="outage">{{ name }}</span>
+            {% endif %}
+    {% endmatch %}
+{% endmacro %}
+
+{% macro items_status(items) %}
+    {% if items.is_offline() %}outage
+    {% else if items.is_online() %}online
+    {% else %}partial-outage
+    {% endif %}
+{% endmacro %}
+
+{% macro render_items(items) %}
+    {% for (name, item) in items.0 %}
+        {% match item %}
+            {% when Item::Service(status) %}<div>{% call render_service(name, status) %}</div>
+            {% when Item::Category(items) %}
+                <details>
+                    <summary class="{% call items_status(items) %}">{{ name }}</summary>
+                    {% call render_items(items) %}
+                </details>
+            {% endwhen %}
+        {% endmatch %}
+    {% endfor %}
+{% endmacro %}
+
+{% call render_items(items) %}
