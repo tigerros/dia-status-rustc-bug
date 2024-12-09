@@ -60,11 +60,7 @@ impl Items {
 }
 
 fn main() {
-    let items = Items(HashMap::from([
-        ("ORG".to_string(), Item::Service(Status::Online)),
-        ("ROB".to_string(), Item::Service(Status::Online)),
-    ]));
-
+    let items = Items(HashMap::new());
     let template = IndexTemplate { items };
 
     println!("{:?}", template.render());
